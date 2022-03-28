@@ -3,15 +3,18 @@ package ru.learnup.mysak.springbootlearnupjdbc.dao;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.learnup.mysak.springbootlearnupjdbc.BookShop;
+import ru.learnup.mysak.springbootlearnupjdbc.Book;
+
+import java.util.List;
 
 @Repository
 public class BookShopDAO {
 
-    private static final String FIND_BY_ID = "select * from learnup.BookShop where 'id' = :id";
+    private static final String FIND_BY_ID = "select * from shop.book_table where id = :id ";
+    private static final String SHOW_ALL = "select * from shop.book_table";
     private static final String SAVE = "" +
-            "INSERT INTO learnup.BookShop (bookName, author, orderNumber) " +
-            "VALUES (:bookName, :author, :orderNumber)";
+            "insert into shop.book_table (bookTitle, bookAuthor, orderNumber)" +
+            " values (:bookTitle, :bookAuthor, :orderNumber)";
 
     private final NamedParameterJdbcTemplate template;
 
@@ -19,27 +22,32 @@ public class BookShopDAO {
         this.template = template;
     }
 
-    public void save(BookShop bookShop) {
+    public void save(Book book) {
         template.update(SAVE, new MapSqlParameterSource()
-                .addValue("bookName", bookShop.getBook())
-                .addValue("author", bookShop.getAuthor())
-                .addValue("orderNumber", bookShop.getOrder())
+                .addValue("bookTitle", book.getTitle())
+                .addValue("bookAuthor", book.getAuthor())
+                .addValue("orderNumber", book.getOrder())
         );
     }
 
-    public BookShop findById(long id) {
+    public Book findById(long id) {
         return template.query(
                 FIND_BY_ID,
                 new MapSqlParameterSource("id", id),
                 (rs, rn) ->
-                        BookShop.builder()
+                        Book.builder()
                                 .id(rs.getLong("id"))
-                                .book(rs.getString("bookName"))
-                                .author(rs.getString("author"))
+                                .title(rs.getString("bookTitle"))
+                                .author(rs.getString("bookAuthor"))
                                 .order(rs.getInt("orderNumber"))
                                 .build()
         ).stream()
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("Book with id: " + id + " not found"));
     }
+
+    public List<Book> showBooks() {
+        return template.queryForList(SHOW_ALL, new MapSqlParameterSource(), Book.class);
+    }
+
 }
