@@ -1,7 +1,7 @@
 package ru.learnup.mysak.springbootlearnupjdbc;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.learnup.mysak.springbootlearnupjdbc.dao.Book;
 import ru.learnup.mysak.springbootlearnupjdbc.dao.BookShopDAO;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class BookShop {
 
     BookShopDAO bookShopDAO;
 
-    private List<Book> bookList = new ArrayList<>();
+    private final List<Book> bookList = new ArrayList<>();
 
     public BookShop(BookShopDAO bookShopDAO) {
         this.bookShopDAO = bookShopDAO;
@@ -27,8 +27,7 @@ public class BookShop {
         return bookShopDAO.findById(id);
     }
 
-    public List<Book> showBooks() {
-
-        return bookShopDAO.showBooks();
+    public List<Book> listBooks() {
+        return bookShopDAO.show();
     }
 }

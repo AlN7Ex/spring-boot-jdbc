@@ -1,4 +1,4 @@
-package ru.learnup.mysak.springbootlearnupjdbc;
+package ru.learnup.mysak.springbootlearnupjdbc.dao;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Book {
 
-    private long id;
+    private Long id;
     private String title;
     private String author;
     private int order;
