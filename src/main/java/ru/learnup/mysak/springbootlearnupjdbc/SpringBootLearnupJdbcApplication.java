@@ -18,7 +18,17 @@ public class SpringBootLearnupJdbcApplication {
 
         BookShop bookShop = context.getBean(BookShop.class);
 
-        Book book1 = bookShop.buyBook(1);
+        // Get list of books in DataBase
+        List<Book> books = bookShop.listBooks();
+        log.info("List of books in book shop:");
+        for (Book book : books) {
+            log.info("{}", book);
+        }
+
+        // Choose and buy book by id
+        Book book = bookShop.buyBook(1);
+        log.info("You bought book: {}", book.getTitle());
+
 
 //        bookShop.addBook(Book.builder()
 //                .title("Java")
@@ -26,9 +36,6 @@ public class SpringBootLearnupJdbcApplication {
 //                .order(3)
 //                .build());
 
-        List<Book> books = bookShop.listBooks();
-        for (Book book : books) {
-            log.info("{}", book);
-        }
+
     }
 }
